@@ -1,0 +1,50 @@
+parameters:
+- name: workingDirectory
+  type: string
+  default: ''
+
+- name: initbackend
+  type: string
+  default: ''
+
+- name: ProjectName
+  type: string
+  default: "Testing"
+
+- name: enablePlan
+  type: boolean
+  default: true
+
+- name: provider
+  type: string
+  default: 'azurerm'
+
+- name: tfplancommandOptions
+  type: string
+  default: '-out=tfplan -lock=false'
+
+- name: ServiceConnectionNameAzureRM
+  type: string
+  default: ''
+
+steps:
+
+- script: |
+    terraform plan ${{ parameters.tfplancommandOptions }}
+  workingDirectory: '${{ parameters.workingDirectory}}'
+  displayName: "Terraform Plan Using TF Workspace for ${{ parameters.ProjectName }}"
+  name: "TerraformPlanTFworkspace"
+  condition: and( eq( ${{ parameters.enablePlan }}, true ), eq( parameters.initbackend, 'tfworkspace'))
+  env:
+    TF_WORKSPACE: "${{ parameters.workspace}}"
+
+- task: TerraformTaskV4@4
+  name: "TerraformPlanAzure"
+  displayName: "Create Terraform Plan Using Azure Backend for ${{ parameters.ProjectName }}"
+  condition: and( eq( ${{ parameters.enablePlan }}, true ), eq( parameters.initbackend, 'azure'))
+  inputs:
+    provider: ${{ parameters.provider }}
+    command: 'plan'
+    commandOptions: ${{ parameters.tfplancommandOptions }}
+    environmentServiceNameAzureRM: ${{ parameters.ServiceConnectionNameAzureRM }}
+    workingDirectory: '${{ parameters.workingDirectory}}'
