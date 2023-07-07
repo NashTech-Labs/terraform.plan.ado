@@ -35,7 +35,6 @@ Paramaters:
 
 ## Use Cases
 
-### 1. Terraform Cloud as Terraform Backend
 
   ```yaml
   # azure-pipeline.yml
@@ -43,52 +42,20 @@ Paramaters:
     repositories:
       - repository: TerraformTemplate
         type: github
-        name: duck-creek/ADO.Pipelines.Templates
+        name: your_username/terraform.plan.ado
         ref: <respective branch name>
-        endpoint: 'Duck Creek'
+        endpoint: 'githubServiceConnectioNname'
+
+ 
 
   steps:
-  - template: frameWork/terraform/actions/main.yml@TerraformTemplate
+
+ 
+
+  - template: plan.yml@TerraformTemplate
     parameters:
-      terraformVersion: '1.4.1'
-      workingDirectory: 'terraformmodule'
-      initbackend: 'tfworkspace'
-      ProjectName: 'Example'
-      workspace: 'tfworkspace-name'
-      tfc_organization_name: 'DCTEnterprise'
-      terraformaccesstoken: $(accesstoken)
-      enablePlan: false
-      ApplyResource: true
-      DestroyResource: true
-      applycommandOptions: "-auto-approve"
-  ```
-In the above pipeline, the Terraform Actions templates are sourced from the duck-creek/ADO.Pipelines.Templates repository on GitHub. The parameters are provided to configure the Terraform pipeline according to the desired build configuration and stages. The value of enablePlan is *false* here but, when set to *true* you need to add *tfplancommandOptions* parameter value. This setup is used when the backend is configured for terraform cloud workspace.
-Please make sure to adjust the repository name, branch name, and parameter values according to your project's requirements.
+      terraformVersion: ${{ parameters.terraformVersion }}
+      ProjectName: ${{ parameters.ProjectName }}
 
-### 2. Azure Blob storage as Terraform Backend
-
-  ```yaml
-  # azure-pipeline.yml
-  resources:
-    repositories:
-      - repository: TerraformTemplate
-        type: github
-        name: duck-creek/ADO.Pipelines.Templates
-        ref: <respective branch name>
-        endpoint: 'Duck Creek'
-
-  steps:
-  - template: frameWork/terraform/actions/main.yml@TerraformTemplate
-    parameters:
-      terraformVersion: '1.4.1'
-      workingDirectory: 'terraformmodule'
-      initbackend: 'azure'
-      ProjectName: 'Example'
-      workspace: 'tfworkspace-name'
-      enablePlan: false
-      ApplyResource: true
-      DestroyResource: true
-      applycommandOptions: "-auto-approve"
-  ```
-In the above pipeline, the Terraform Actions templates are sourced from the duck-creek/ADO.Pipelines.Templates repository on GitHub. The parameters are provided to configure the Terraform pipeline according to the desired build configuration and stages. The value of enablePlan is *false* here but, when set to *true* you need to add *tfplancommandOptions* parameter value. This setup is used when the backend is configured for terraform cloud workspace
-Please make sure to adjust the repository name, branch name, and parameter values according to your project's requirements.
+ 
+    ```
