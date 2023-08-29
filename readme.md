@@ -1,4 +1,4 @@
-# ADO.Pipelines.Templates.frameWork.terraform.actions
+# terraform.actions
 
 ## Pipeline Requirements
 
